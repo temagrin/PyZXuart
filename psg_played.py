@@ -5,8 +5,8 @@ from comunication import AY
 
 if __name__ == '__main__':
     print('Parse file')
-    f = open("Nemesis The Warlock.psg", "rb")
-
+    # f = open("Nemesis The Warlock.psg", "rb") # Glitched(((
+    f = open("D.J.Serg - SoundStorm (2001) (Millennium 1901, 2).psg", "rb")  # Normal)))
     frames = []
     frame = []
     is_header = True
@@ -33,7 +33,7 @@ if __name__ == '__main__':
                 for _ in range(byte*4):
                     frames.append(None)
             except:
-                pass
+                print("WTH???", byte[0])
             continue
         elif not is_header:
             try:
@@ -47,14 +47,20 @@ if __name__ == '__main__':
 
     # По идее надо частоту фреймов с заголовка файла вытянуть.
     # оно там 5 или 6 байтом должно идти. но у хардкоженого трека это 50Гц
+    co = 0
     for f in frames:
         start_time = datetime.now()
+        print("Frame", hex(co))
+        co += 1
         if f:
             for i in range(int(len(f)/2)):
                 ay.wr(f[i*2], f[i*2+1])
+                print(hex(f[i*2]), '<-', hex(f[i*2+1]))
+        else:
+            print("skip frame")
         end_time = datetime.now()
-
         # делаем задержку в 1/50 секунды учитывая время сколько была отправка данных.
         sleep_time = 0.02 - ((end_time-start_time).microseconds*0.000001)
-
+        print("to next frame est:", sleep_time)
         sleep(sleep_time)
+        print()
