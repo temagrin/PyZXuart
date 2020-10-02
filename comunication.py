@@ -53,6 +53,10 @@ class AY:
     def _get_ports(self):
         return list_ports.comports()
 
+    def clean(self):
+        for i in range(16):
+            self.wr(i, 0)
+
     def wr(self, reqister: int, data: int):
         self._port.write(bytes([reqister, data]))
 
