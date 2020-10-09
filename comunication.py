@@ -91,6 +91,9 @@ class AY:
 
             sleep_time = delay_time - ((end_time - start_time).microseconds * 0.000001)
             print("to next frame est:", sleep_time)
-            sleep(sleep_time)
+            if sleep_time<0:
+                print("WIDE FRAME!!! NO SLEEP!!! TIME WRONGED")
+            else:
+                sleep(sleep_time)
             print()
 
