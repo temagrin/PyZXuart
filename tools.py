@@ -7,7 +7,7 @@ class PGS_FILE:
         with open(self._filename, 'rb') as f:
             frame = []
             # https://documentation.help/AY-3-8910.12-ZX-Spectrum-ru/ay_r9zqf.htm offset 16 = 15 + 1
-            readed_byte = f.read(16)  # skip headers bytes
+            readed_byte = f.read(15)  # skip headers bytes
             while readed_byte:
                 readed_byte = f.read(1)
                 if not readed_byte:

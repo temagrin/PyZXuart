@@ -1,3 +1,6 @@
+from datetime import datetime
+from time import sleep
+
 import serial
 from serial.tools import list_ports
 
@@ -63,3 +66,31 @@ class AY:
     def play_macros(self, macros):
         for r, d in macros:
             self.wr(r, d)
+
+    def play_buffer(self, buff: list, rate: int = 50, loop_play: bool = False):
+        delay_time = 1. / rate
+        while 1:
+            start_time = datetime.now()
+            if buff:
+                frame = buff.pop(0)
+            elif loop_play:
+                sleep(delay_time)
+                continue
+            else:
+                break
+            print("Send frame:")
+            if frame:
+                for i in range(int(len(frame) / 2)):
+                    self.wr(frame[i * 2], frame[i * 2 + 1])
+                    sleep(0.00001)
+                    print(hex(frame[i * 2]), '<-', hex(frame[i * 2 + 1]))
+            else:
+                print("  nop  ")
+            end_time = datetime.now()
+            # делаем задержку в 1/50 секунды учитывая время сколько была отправка данных.
+
+            sleep_time = delay_time - ((end_time - start_time).microseconds * 0.000001)
+            print("to next frame est:", sleep_time)
+            sleep(sleep_time)
+            print()
+
